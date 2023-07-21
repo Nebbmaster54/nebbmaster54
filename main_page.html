@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beber's planner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Beber's planner</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Algorithme Grosjean</h2>
+            <p>Son dernier jour de repos et le prochain premier jour de repos la semaine d'après</p>
+            <p>Si jeudi est son dernier jour de repos, ça veut dire que la semaine prochaine il sera de nuit mercredi et de repos jeudi</p>
+        </section>
+
+        <section>
+            <h2>Calculateur du planning de Beber</h2>
+            <div id="legend"></div> <!-- Ici, nous ajouterons la légende pour les couleurs -->
+            <div>
+                <label for="firstDay">Premier jour de la semaine : </label>
+                <select id="firstDay" onchange="generateCalendar()"> <!-- Ajout de l'élément select pour le choix du premier jour -->
+                    <option value="monday">Lundi</option>
+                    <option value="tuesday">Mardi</option>
+                    <option value="wednesday">Mercredi</option>
+                    <option value="thursday">Jeudi</option>
+                    <option value="friday">Vendredi</option>
+                    <option value="saturday">Samedi</option>
+                    <option value="sunday">Dimanche</option>
+                </select>
+            </div>
+            <div id="calendar"></div> <!-- Ici, nous ajouterons le calendrier généré par JavaScript -->
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2023 Beber's planner by Nebbmaster. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // Données du calendrier (par exemple, jours de la semaine en français)
+        const weekDays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']; // Lundi est maintenant le premier jour de la semaine
+
+        // Données du calendrier (par exemple, jours de la semaine)
+        const calendarData = [
+            { day: '2023-07-01', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-02', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-03', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-04', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-05', type: 'matin' }, // Exemple: Matin
+            { day: '2023-07-06', type: 'matin' }, // Exemple: Matin
+            { day: '2023-07-07', type: 'aprem' }, // Exemple: Après-midi
+            { day: '2023-07-08', type: 'aprem' }, // Exemple: Après-midi
+            { day: '2023-07-09', type: 'nuit' }, // Exemple: Nuit
+            { day: '2023-07-10', type: 'nuit' }, // Exemple: Nuit
+            { day: '2023-07-11', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-12', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-13', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-14', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-15', type: 'matin' }, // Exemple: Matin
+            { day: '2023-07-16', type: 'matin' }, // Exemple: Matin
+            { day: '2023-07-17', type: 'aprem' }, // Exemple: Après-midi
+            { day: '2023-07-18', type: 'aprem' }, // Exemple: Après-midi
+            { day: '2023-07-19', type: 'nuit' }, // Exemple: Nuit
+            { day: '2023-07-20', type: 'nuit' }, // Exemple: Nuit
+            { day: '2023-07-21', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-22', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-23', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-24', type: 'repos' }, // Exemple: Repos
+            { day: '2023-07-25', type: 'matin' }, // Exemple: Matin
+            { day: '2023-07-26', type: 'matin' }, // Exemple: Matin
+            { day: '2023-07-27', type: 'aprem' }, // Exemple: Après-midi
+            { day: '2023-07-28', type: 'aprem' }, // Exemple: Après-midi
+            { day: '2023-07-29', type: 'nuit' }, // Exemple: Nuit
+            { day: '2023-07-30', type: 'nuit' }, // Exemple: Nuit
+            // Ajoutez d'autres jours ici avec leurs types
+        ];
+
+        // Couleurs pour les différents types de jours
+        const colors = {
+            repos: '#ffffff', // Blanc
+            matin: '#ffff00', // Jaune
+            aprem: '#00ff00', // Vert
+            nuit: '#66a3ff', // Bleu
+        };
+
+
+        // Fonction pour obtenir le premier jour de la semaine choisi par l'utilisateur
+        function getFirstDayOfWeek() {
+            const selectElement = document.getElementById('firstDay');
+            return selectElement.value;
+        }
+
+        // Fonction pour obtenir le nombre de jours dans le mois en cours
+        function getDaysInMonth(year, month) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+
+        // Fonction pour générer le calendrier
+        function generateCalendar() {
+            const calendarContainer = document.getElementById('calendar');
+            calendarContainer.innerHTML = ''; // Effacer le calendrier existant
+            
+            const legendContainer = document.getElementById('legend');
+	    
+            // Obtenir le premier jour de la semaine choisi par l'utilisateur
+            const firstDayOfWeek = getFirstDayOfWeek();
+            let firstDayIndex = weekDays.indexOf(firstDayOfWeek); // Trouver l'index du premier jour choisi dans le tableau weekDays
+
+            // Déplacer le premier jour de la semaine au début du tableau weekDays
+            while (firstDayIndex > 0) {
+                weekDays.push(weekDays.shift());
+                firstDayIndex--;
+            }
+
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth();
+            const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+            const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+            // Affichage de la légende pour les couleurs
+            let legendContent = '<div class="legend">'; // Ajout d'une classe 'legend' pour le style CSS
+            for (const type in colors) {
+                legendContent += `
+                    <div class="legend-item ${type}"> <!-- Classe CSS correspondant au type de jour -->
+                        <div class="legend-color" style="background-color: ${colors[type]}"></div>
+                        <span>${type[0].toUpperCase() + type.slice(1)}</span>
+                    </div>
+                `;
+            }
+            legendContent += '</div>';
+            legendContainer.innerHTML = legendContent;
+
+            // Boucle pour créer les cases vides avant le premier jour du mois
+            for (let i = 0; i < firstDayOfMonth - 1; i++) { // Lundi est maintenant le premier jour de la semaine
+                const emptyDayElement = document.createElement('div');
+                emptyDayElement.classList.add('day', 'empty-day');
+                calendarContainer.appendChild(emptyDayElement);
+            }
+
+            // Boucle pour créer les jours du mois
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`; // Format de la date: 'YYYY-MM-DD'
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+
+                // Recherche du type du jour dans le calendrierData
+                const dayData = calendarData.find(item => item.day === dayDate);
+                if (dayData) {
+                    dayElement.classList.add(dayData.type);
+                } else {
+                    dayElement.classList.add('no-data'); // Jour sans donnée
+                }
+
+                dayElement.innerText = weekDays[new Date(dayDate).getDay()]; // Affiche le nom du jour en français
+                calendarContainer.appendChild(dayElement);
+            }
+        }
+
+        // Appel de la fonction pour générer le calendrier au chargement de la page
+        generateCalendar();
+    </script>
+</body>
+</html>

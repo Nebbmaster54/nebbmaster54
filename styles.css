@@ -1,0 +1,99 @@
+/* Réinitialisation des styles pour une meilleure cohérence entre les navigateurs */
+body, h1, h2, p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Styles pour l'en-tête */
+header {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+/* Styles pour les sections du contenu principal */
+section {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+/* Styles pour le pied de page */
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* Styles pour les liens */
+a {
+  color: #007BFF; /* Couleur bleue pour les liens */
+  text-decoration: none; /* Pas de soulignement par défaut */
+}
+
+a:hover {
+  text-decoration: underline; /* Soulignement au survol */
+}
+
+/* Styles pour le calendrier */
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  height: 40px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+/* Couleurs pour les différents types de jours */
+.repos {
+  background-color: white; /* Repos - Blanc */
+}
+
+.matin {
+  background-color: yellow; /* Matin - Jaune */
+}
+
+.aprem {
+  background-color: green; /* Après-midi - Vert */
+}
+
+.nuit {
+  background-color: #66a3ff; /* Nuit - Bleu */
+}
+
+.no-data {
+  background-color: #f2f2f2; /* Jour sans donnée - Gris clair */
+}
+
+/* Styles pour la légende */
+.legend {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.legend-item {
+    display: flex
